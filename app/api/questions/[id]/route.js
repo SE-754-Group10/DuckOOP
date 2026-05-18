@@ -1,7 +1,9 @@
 import questions from "@/lib/questions";
 
 export async function GET(request, { params }) {
-  const question = questions[params.id];
+  const { id } = await params;
+  const question = questions[id];
+
   if (!question) {
     return Response.json({ error: "Question not found" }, { status: 404 });
   }
@@ -9,6 +11,5 @@ export async function GET(request, { params }) {
     id: question.id,
     text: question.text,
     options: question.options,
-    topic: question.topic,
   });
 }
