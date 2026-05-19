@@ -15,6 +15,15 @@ type GradeResult = {
 export type Question = { id: string; text: string; options: Option[] };
 export type Answer = { answerId: string; result: GradeResult };
 
+function shuffleOptions<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const QUESTION_IDS = [
   "q1",
   "q2",
@@ -42,7 +51,9 @@ export default function Quiz() {
         fetch(`/api/questions/${id}`).then((r) => r.json()),
       ),
     )
-      .then(setQuestions)
+      .then((qs) =>
+        setQuestions(qs.map((q: Question) => ({ ...q, options: shuffleOptions(q.options) }))),
+      )
       .finally(() => setLoading(false));
   }, []);
 
@@ -63,6 +74,9 @@ export default function Quiz() {
   }
 
   function startNew() {
+    setQuestions((prev) =>
+      prev.map((q) => ({ ...q, options: shuffleOptions(q.options) })),
+    );
     setAnswers({});
     setCurrentIndex(0);
     setSubmitted(false);
