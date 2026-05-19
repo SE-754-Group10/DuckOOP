@@ -52,7 +52,12 @@ export default function Quiz() {
       ),
     )
       .then((qs) =>
-        setQuestions(qs.map((q: Question) => ({ ...q, options: shuffleOptions(q.options) }))),
+        setQuestions(
+          qs.map((q: Question) => ({
+            ...q,
+            options: shuffleOptions(q.options),
+          })),
+        ),
       )
       .finally(() => setLoading(false));
   }, []);
@@ -115,7 +120,9 @@ export default function Quiz() {
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 p-6">
       <div className="w-full max-w-2xl flex flex-col gap-5">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-zinc-900">OOP Quiz</h1>
+          <h1 className="text-xl font-semibold text-zinc-900">
+            OOP Knowledge Check
+          </h1>
           <span className="text-sm text-zinc-500">
             {Object.keys(answers).length} / {QUESTION_IDS.length} answered
           </span>
